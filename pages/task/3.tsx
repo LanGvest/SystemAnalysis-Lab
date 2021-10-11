@@ -114,7 +114,7 @@ const execute = (setter: SetState<CustomJSX>) => {
 
 export default function Task3():CustomElement {
 	const t: string = "Task 3";
-	const st: string = "Finding the smallest path";
+	const st: string = "Finding the optimal path";
 	const [ctn,setCtn] = useState <CustomJSX>(() => <Loading/>);
 	useEffect(execute.bind(null,setCtn),[]);
 	return (
