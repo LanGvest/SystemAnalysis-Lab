@@ -1,4 +1,12 @@
-import {CustomElement, CustomJSX, OutputStream, SetState} from "../../modules/utils";
+import {
+	copyObject,
+	CustomElement,
+	CustomJSX,
+	cutMatrix,
+	MatrixDirection,
+	OutputStream,
+	SetState
+} from "../../modules/utils";
 import {useEffect, useState} from "react";
 import {Loading} from "../../components/loading";
 import Head from "next/head";
@@ -19,11 +27,6 @@ const execute = (setContent: SetState<CustomJSX>) => {
 
 			const globalStores: Array<number> = [20,20,40,45];
 			const globalTakers: Array<number> = [25,30,40,15];
-
-			enum MatrixDirection {
-				LINE,
-				COLUMN
-			}
 
 			type Matrix = Array<Array<number>>;
 
@@ -51,26 +54,6 @@ const execute = (setContent: SetState<CustomJSX>) => {
 				for(i = 0; i < globalMatrix[0].length; i++) newLine.push(0);
 				globalMatrix.push(newLine);
 				globalStores.push(takersSum-storesSum);
-			}
-
-			function copyObject<T>(object: T): T {
-				return JSON.parse(JSON.stringify(object));
-			}
-
-			function cutMatrix(matrix: Matrix, direction: MatrixDirection, index: number): Matrix {
-				if(direction === MatrixDirection.LINE) {
-					matrix.splice(index, 1);
-					return typeof matrix[0] === "undefined" ? [[]] : matrix;
-				} else {
-					let len: number = matrix[0].length;
-					let newMatrix: Matrix = [], i: number, j: number;
-					for(i = 0; i < matrix.length; i++) {
-						let newLine: Array<number> = [];
-						for(j = 0; j < len; j++) if(j !== index) newLine.push(matrix[i][j]);
-						newMatrix.push(newLine);
-					}
-					return typeof newMatrix[0] === "undefined" ? [[]] : newMatrix;
-				}
 			}
 
 			interface TransactionProps {

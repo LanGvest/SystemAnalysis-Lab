@@ -8,6 +8,12 @@
 	--color-hint: #878d98;
 }
 
+#cy {
+	height: 55vh;
+	width: 100%;
+	border: 2px dotted var(--color-hint);
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;

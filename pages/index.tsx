@@ -7,9 +7,9 @@ export default function Index(): CustomElement {
 		<div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "calc(100vh - 40px * 2)"}}>
 			<h1 style={{textTransform: "uppercase"}}><span style={{color: "var(--color-primary)", fontSize: "inherit"}}>s</span>ystem <span style={{color: "var(--color-primary)", fontSize: "inherit"}}>a</span>nalysis</h1>
 			<h1>make ur choice</h1>
-			<button style={{marginTop: "26px"}} onClick={() => router.push("/tasks/1")}>goto Task 1</button>
-			<p style={{marginTop: "26px", textDecoration: "line-through"}}>Made in China</p>
-			<p style={{marginTop: "10px"}}>Made by Vyacheslav Logvinets</p>
+			<button style={{marginTop: "26px"}} onClick={() => router.push("/task/1")}>goto Task 1</button>
+			<p style={{marginTop: "26px"}}>by Vyacheslav Logvinets</p>
+			<a style={{marginTop: "10px"}} href="https://github.com/LanGvest/system-analysis">goto GitHub repository</a>
 		</div>
 
 	)

@@ -7,37 +7,33 @@ const $cl = console.log;
 
 declare global {
 	interface String {
-		replaceFull(search: Value, to: Value): string
+		replaceFull(s: V, t: V): string
 		vacuum(): string
 		spaceTrim(): string
 		ucFirst(): string
-		format(values: FormatValues | Array<Value>): string
-		getAmountOf(search: Value): number
+		format(vs: FV|Array<V>): string
+		getAmountOf(s: V): number
 		toRandomCase(): string
 		reverse(): string
-		toggle(firstValue: Value, secondValue: Value): string
+		toggle(fV: V, sV: V): string
 	}
 	interface Array<T> {
-		for(callbackfn: (value: T, index: number) => void): void
-		forMap<U>(callbackfn: (value: T, index: number) => U): Array<U>
+		for(c: (v: T, i: number) => void): void
+		forMap<U>(c: (v: T, i: number) => U): Array<U>
 	}
 }
 
-type Value = string | number;
+type Matrix = Array<Array<number>>;
+type V = string | number;
 type CustomElement = JSX.Element;
 type CustomJSX = CustomElement | null;
 type CustomJSXs = CustomJSX | Array<CustomJSX>;
 type SetState<T> = Dispatch<SetStateAction<T>>;
 
-Array.prototype.for = function<T>(callbackfn: (value: T, index: number) => T): void {
-	let i: number = 0; for(; i < this.length;) callbackfn(this[i], i++);
-};
+Array.prototype.for = function<T>(c:(v:T,i:number)=>T):void{let i:number=0;for(;i<this.length;)c(this[i],i++)};
+Array.prototype.forMap = function<U,T>(c:(v:T,index:number)=>U):Array<U>{let i:number=0,n:Array<U>=[];for(;i<this.length;)n[i]=c(this[i],i++);return n};
 
-Array.prototype.forMap = function<U, T>(callbackfn: (value: T, index: number) => U): Array<U> {
-	let i: number = 0, newArr: Array<U> = []; for(; i < this.length;) newArr[i] = callbackfn(this[i], i++); return newArr;
-};
-
-String.prototype.replaceFull = function(search: Value, to: Value): string {
+String.prototype.replaceFull = function(search: V, to: V): string {
 	let value: string = this.toString(); search = search.toString(); to = to.toString();
 	if(to.includes(search)) return value;
 	let regexp: RegExp = new RegExp(search, "g");
@@ -56,16 +52,14 @@ String.prototype.ucFirst = function(): string {
 	return this && this[0].toUpperCase()+this.substring(1);
 };
 
-String.prototype.getAmountOf = function(search: Value): number {
+String.prototype.getAmountOf = function(search: V): number {
 	return (this.match(new RegExp(escapeRegexpOperators(search.toString()), "g"))||[]).length;
 };
 
-interface FormatValues {
-	[key: string]: any
-}
+interface FV {[key: string]: any}
 
-String.prototype.format = function(values: FormatValues | Array<Value>): string {
-	let params: FormatValues = (values instanceof Array ? {...values} : values) as FormatValues, value: string = this.toString();
+String.prototype.format = function(values: FV|Array<V>): string {
+	let params: FV = (values instanceof Array ? {...values} : values) as FV, value: string = this.toString();
 	Array.from(new Set(value.match(/(?<={)(\d+|[a-z_][a-z_\d]*)(?=})/gi))).for(parameter => {
 		if(/^\d+$/.test(parameter)) parameter = Number(parameter).toString();
 		value = value.replace(new RegExp(`\\{${parameter}\\}`, "g"), params[parameter].toString());
@@ -83,7 +77,7 @@ String.prototype.reverse = function(): string {
 	return this.split("").reverse().join("");
 };
 
-String.prototype.toggle = function(firstValue: Value, secondValue: Value): string {
+String.prototype.toggle = function(firstValue: V, secondValue: V): string {
 	return this.replace(new RegExp(escapeRegexpOperators(firstValue.toString()), "g"), "%TOGGLE%").replace(new RegExp(escapeRegexpOperators(secondValue.toString()), "g"), firstValue.toString()).replace(new RegExp("%TOGGLE%", "g"), secondValue.toString());
 };
 
@@ -163,6 +157,59 @@ class OutputStream {
 	}
 }
 
+function copyObject<T>(object: T): T {
+	return JSON.parse(JSON.stringify(object));
+}
+
+enum MatrixDirection {
+	LINE,
+	COLUMN
+}
+
+function replaceMatrix(matrix: Matrix, direction: MatrixDirection, index: number, value: number): Matrix {
+	console.error(matrix)
+	if(direction === MatrixDirection.LINE) {
+		let newMatrix: Matrix = [], i: number;
+		let newLine: Array<number> = [];
+		matrix[0].for(() => newLine.push(value));
+		for(i = 0; i < matrix.length; i++) {
+			newMatrix.push(i === index ? newLine: matrix[i]);
+		}
+
+		console.warn(newMatrix)
+		return newMatrix;
+	} else {
+		let len: number = matrix[0].length;
+		let newMatrix: Matrix = [], i: number, j: number;
+		for(i = 0; i < matrix.length; i++) {
+			let newLine: Array<number> = [];
+			for(j = 0; j < len; j++) {
+				if(j === index) newLine.push(value);
+				else newLine.push(matrix[i][j]);
+			}
+			newMatrix.push(newLine);
+		}
+		console.warn(newMatrix)
+		return newMatrix;
+	}
+}
+
+function cutMatrix(matrix: Matrix, direction: MatrixDirection, index: number): Matrix {
+	if(direction === MatrixDirection.LINE) {
+		matrix.splice(index, 1);
+		return typeof matrix[0] === "undefined" ? [[]] : matrix;
+	} else {
+		let len: number = matrix[0].length;
+		let newMatrix: Matrix = [], i: number, j: number;
+		for(i = 0; i < matrix.length; i++) {
+			let newLine: Array<number> = [];
+			for(j = 0; j < len; j++) if(j !== index) newLine.push(matrix[i][j]);
+			newMatrix.push(newLine);
+		}
+		return typeof newMatrix[0] === "undefined" ? [[]] : newMatrix;
+	}
+}
+
 export {HashType};
 export {
 	getRandomInt,
@@ -176,7 +223,11 @@ export {
 	isProduction,
 	subscribeToWindowEvent,
 	unsubscribeFromWindowEvents,
+	cutMatrix,
+	replaceMatrix,
+	copyObject,
+	MatrixDirection,
 	OutputStream,
 	$cl
 };
-export type {CustomElement, CustomJSX, CustomJSXs, SetState};
+export type {CustomElement, CustomJSX, CustomJSXs, SetState, Matrix};
