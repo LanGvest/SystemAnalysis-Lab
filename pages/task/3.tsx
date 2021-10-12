@@ -58,7 +58,9 @@ const execute = (setter: SetState<CustomJSX>) => {
 			}([1]);
 			results.for(way => output.value = way.join(" -> "));
 			let nodes: Array<cytoscape.NodeDefinition> = globalMatrix.forMap((v, i) => {
-				return {group: "nodes", data: {id: `n${i+1}`, name: `Город ${i+1}`}}
+				return {group: "nodes", data: {id: `n${i+1}`, name: `City ${i+1}`}, style: {
+					...(i+1 === 1 ? {"border-color": "#ff657e", "border-width": 5} : {})
+					}}
 			})
 			let firstResult: string = results[0].join("->");
 			let edges: Array<cytoscape.EdgeDefinition> = [], i: number, j: number, len: number = globalMatrix.length;
