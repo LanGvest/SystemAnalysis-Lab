@@ -75,7 +75,7 @@ const execute = (setter: SetState<CustomJSX>) => {
                 }
                 return max_flow;
             }
-            output.value = "Result: " + fordFulkerson(globalMatrix, 0, globalMatrix.length-1) + "s.u.";
+            output.value = "Result: " + fordFulkerson(globalMatrix, 0, globalMatrix.length-1) + " s.u.";
             let nodes: Array<cytoscape.NodeDefinition> = globalMatrix.forMap((v, i) => {
                 return {group: "nodes", data: {id: `n${i+1}`, name: i === 0 ? `Source ${i+1}` : i === globalMatrix.length-1 ? `Target ${i+1}` : `Node ${i+1}`}, style: {
                         ...(i === 0 ? {"border-color": "#ff657e", "border-width": 5} : {}),
