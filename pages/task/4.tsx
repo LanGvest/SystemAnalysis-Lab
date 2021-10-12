@@ -75,10 +75,9 @@ const execute = (setter: SetState<CustomJSX>) => {
                 }
                 return max_flow;
             }
-            output.value = "Result: " + fordFulkerson(globalMatrix, 0, globalMatrix.length-1);
+            output.value = "Result: " + fordFulkerson(globalMatrix, 0, globalMatrix.length-1) + "s.u.";
             let nodes: Array<cytoscape.NodeDefinition> = globalMatrix.forMap((v, i) => {
-                return {group: "nodes", data: {id: `n${i+1}`, name: i === 0 ? `Исток ${i+1}` : i === globalMatrix.length-1 ? `Сток ${i+1}` : `Узел ${i+1}`}, style: {
-                        //...(firstResult.includes(`${i+1}`) ? {"background-opacity": 1, "background-color": "#247ee5"} : {}),
+                return {group: "nodes", data: {id: `n${i+1}`, name: i === 0 ? `Source ${i+1}` : i === globalMatrix.length-1 ? `Target ${i+1}` : `Node ${i+1}`}, style: {
                         ...(i === 0 ? {"border-color": "#ff657e", "border-width": 5} : {}),
                         ...(i === globalMatrix.length-1 ? {"border-color": "#42f675", "border-width": 5} : {})
                     }}
@@ -147,7 +146,7 @@ export default function Task4():CustomElement {
             <p style={{marginBottom: "26px", textAlign: "center", fontSize: "20px", color: "var(--color-primary)", textTransform: "uppercase", fontWeight: "bold"}}>{st}</p>
             <pre>{ctn}</pre>
             <div id="cy" style={{marginTop: "10px"}}/>
-            <a style={{marginTop: "10px"}} href="https://github.com/LanGvest/system-analysis/blob/main/pages/task/4.tsx">goto GitHub repository</a>
+            <p style={{marginTop: "10px"}}><a href="https://github.com/LanGvest/system-analysis/blob/main/pages/task/4.tsx">goto GitHub repository</a></p>
         </>
     );
 }

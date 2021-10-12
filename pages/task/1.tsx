@@ -199,7 +199,7 @@ const execute = (setContent: SetState<CustomJSX>) => {
 			const $3: MethodResult = getMethodResult_3();
 			compareResults([$1, $2, $3]);
 
-			resolve(<>{output.value}</>);
+			resolve(<>{output.value}<p style={{marginTop: "10px"}}><a href="https://github.com/LanGvest/system-analysis/blob/main/pages/task/1.tsx">goto GitHub repository</a></p></>);
 		}),
 		new Promise<void>(resolve => setTimeout(resolve, 2000))
 	]).then(dataStore => setContent(() => dataStore[0]));
@@ -217,7 +217,6 @@ export default function Task1(): CustomElement {
 			<h1 style={{marginBottom: "10px", textAlign: "center"}}>Task 1</h1>
 			<p style={{marginBottom: "26px", textAlign: "center", fontSize: "20px", color: "var(--color-primary)", textTransform: "uppercase", fontWeight: "bold"}}>Transport model</p>
 			<pre>{content}</pre>
-			<a style={{marginTop: "10px"}} href="https://github.com/LanGvest/system-analysis/blob/main/pages/task/1.tsx">goto GitHub repository</a>
 		</>
 	);
 }

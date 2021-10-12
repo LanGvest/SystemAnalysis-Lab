@@ -125,7 +125,7 @@ export default function Task3():CustomElement {
 			<p style={{marginBottom: "26px", textAlign: "center", fontSize: "20px", color: "var(--color-primary)", textTransform: "uppercase", fontWeight: "bold"}}>{st}</p>
 			<pre>{ctn}</pre>
 			<div id="cy" style={{marginTop: "10px"}}/>
-			<a style={{marginTop: "10px"}} href="https://github.com/LanGvest/system-analysis/blob/main/pages/task/3.tsx">goto GitHub repository</a>
+			<p style={{marginTop: "10px"}}><a href="https://github.com/LanGvest/system-analysis/blob/main/pages/task/3.tsx">goto GitHub repository</a></p>
 		</>
 	);
 }
